@@ -8,18 +8,17 @@ from settings import *
 
 class Game:
     start = pg.time.get_ticks()
-    is_playing = True
-    tiles = []
     hero = Hero(vec([BIT * SCALE * 24, BIT * SCALE * 3]))
     score = 0
+    tiles = []
     mushrooms = []
 
     def restart_game(self):
-        self.is_playing = True
         self.hero = Hero(vec([BIT * SCALE * 24, BIT * SCALE * 3]))
         self.score = 0
 
     def handle_events(self):
+        
         for event in pg.event.get():
             esc_btn_pressed = pg.key.get_pressed()[pg.K_ESCAPE]
             red_btn_pressed = event.type == pg.QUIT
@@ -84,11 +83,11 @@ class Game:
 
     def run_game(self):
 
-        while self.is_playing:
+        while True:
 
             # spawn mushrooms
             now = pg.time.get_ticks()
-            if now - self.start > 3000 and len(self.mushrooms) < 3:
+            if now - self.start > 3000 and len(self.mushrooms) < 30:
                 self.start = now
                 mushroom = Mushroom(vec(BIT * SCALE * random.randint(8, 32), (-BIT * SCALE)))
                 self.mushrooms.append(mushroom)
@@ -122,7 +121,6 @@ class Game:
                         self.hero.hp -= 1
 
             if self.hero.hp == 0:
-                self.is_playing = False
                 self.restart_game()
 
             self.update_view()
